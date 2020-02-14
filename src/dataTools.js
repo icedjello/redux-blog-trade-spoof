@@ -30,4 +30,34 @@ const _quantityGen = () => (_randomNumGenerator(8000) + 1000)
 
 const _priceGen = () => parseFloat(`${_randomNumGenerator(250)}.${_randomNumGenerator(99)}`)
 
-export { makeData };
+
+const initialState = {
+  rowData: makeData(50000)
+}
+
+const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 10)
+
+const priceUpdater = (prevPrice) => {
+  let price = prevPrice
+  if (_randomNumGenerator(1) === 0) {
+    price -= _fluctuation(prevPrice)
+  } else {
+    price += _fluctuation(prevPrice)
+  }
+  return price;
+}
+
+
+const quantityUpdater = (prevQuantity) => {
+  let amount = prevQuantity
+  if (_randomNumGenerator(1) === 0) {
+    amount -= _fluctuation(prevQuantity)
+  } else {
+    amount += _fluctuation(prevQuantity)
+  }
+  return amount;
+}
+
+const bskUpdater = () => _randomNumGenerator(2)
+
+export { initialState, bskUpdater, priceUpdater, quantityUpdater };

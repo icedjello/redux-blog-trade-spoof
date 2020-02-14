@@ -36,6 +36,7 @@ class App extends Component {
             columnDefs={[
               {
                 field: 'id',
+                hide: true
               },
               {
                 field: 'instrument',
@@ -51,10 +52,12 @@ class App extends Component {
                 field: 'price'
               },
               {
-                headerName: 'High'
+                headerName: 'High',
+                hide: true
               },
               {
-                headerName: 'Low'
+                headerName: 'Low',
+                hide: true
               },
             ]}
             autoGroupColumnDef={

@@ -1,12 +1,9 @@
 import * as actionTypes from './actionTypes';
 
-import { makeData } from './dataBuilder';
+import { initialState, bskUpdater, priceUpdater, quantityUpdater } from '../dataTools';
+
 
 let startTime = null;
-
-const initialState = {
-  rowData: makeData(50000)
-}
 
 const reducer = (prevState = initialState, action) => {
   switch (action.type) {
@@ -18,14 +15,18 @@ const reducer = (prevState = initialState, action) => {
       };
 
     case actionTypes.ADVANCE_ONCE:
-      let updatedOddData = prevState.rowData.map(row => ({
+      let updatedData = prevState.rowData.map(row => ({
         ...row,
-        number: row.id % 2 === 0 ? row.number + 1 : row.number
+        quantity: quantityUpdater(row.quantity),
+        price: priceUpdater(row.price),
+        bsk: bskUpdater()
+
       }))
+      // debugger
       startTime = Date.now()
       return {
         ...prevState,
-        rowData: updatedOddData
+        rowData: updatedData
       }
     default: return prevState;
   }
