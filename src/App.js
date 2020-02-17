@@ -49,7 +49,10 @@ class App extends Component {
                 field: 'quantity',
               },
               {
-                field: 'price'
+                field: 'price',
+                valueFormatter: (params) =>
+                  (Math.round(params.data.price * 100) / 100).toFixed(2),
+                cellRenderer: "agAnimateShowChangeCellRenderer"
               },
               {
                 headerName: 'High',
