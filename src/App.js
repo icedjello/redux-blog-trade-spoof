@@ -8,6 +8,7 @@ import 'ag-grid-enterprise';
 
 import { startTime } from './store/reducer';
 import * as actions from './store/actions';
+import { ValueService } from "ag-grid-community";
 
 class App extends Component {
 
@@ -39,33 +40,40 @@ class App extends Component {
                 hide: true
               },
               {
+                field: 'country',
+                rowGroup: true,
+                hide: true
+              },
+              {
                 field: 'instrument',
               },
               {
                 headerName: 'B/S/K',
                 field: 'bsk',
+                valueFormatter: params => _preFormatter(params, _bskFormatter)
+
               },
               {
                 field: 'quantity',
               },
               {
                 field: 'price',
-                valueFormatter: (params) =>
-                  (Math.round(params.data.price * 100) / 100).toFixed(2),
+                aggFunc: _priceAggFunc,
+                valueFormatter: params => _preFormatter(params, _priceFormatter),
                 cellRenderer: "agAnimateShowChangeCellRenderer"
               },
               {
                 headerName: 'High',
-                hide: true
+                // hide: true
               },
               {
                 headerName: 'Low',
-                hide: true
+                // hide: true
               },
             ]}
             autoGroupColumnDef={
               {
-                headerName: 'Letter',
+                headerName: 'Country',
                 flex: 1
               }
             }
@@ -74,6 +82,7 @@ class App extends Component {
               sortable: true,
               flex: 1
             }}
+            suppressAggFuncInHeader={true}
             rowData={this.props.rowData}
             onGridReady={this.onGridReady.bind(this)}
             deltaRowDataMode={true}
@@ -95,6 +104,19 @@ class App extends Component {
     );
   }
 }
+
+const _preFormatter = (params, formatter) => params.node.group ? '' : formatter(params)
+
+const _priceFormatter = params => (Math.round(params.data.price * 100) / 100).toFixed(2)
+
+const _bskFormatter = params => params.data.bsk === 0 ? 'BUY' : params.data.bsk === 1 ? 'SELL' : 'KEEP'
+
+const _priceAggFunc = (values) => {
+  let sum = 0;
+  values.forEach(value => sum += value);
+  return (Math.round(sum * 100) / 100).toFixed(2)
+}
+
 
 const mapStateToProps = state => {
   return {
