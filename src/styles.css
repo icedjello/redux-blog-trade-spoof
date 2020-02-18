@@ -1,0 +1,45 @@
+.parent {
+  width: 100vw;
+  height: 100vh;
+  background: grey;
+}
+
+.button-container {
+  height: 5%;
+  background: dimgray;
+}
+
+.ag-theme-balham-dark {
+  height: 95%;
+}
+
+.cremeButton-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cremeButton {
+  background: linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
+  background-color: #eae0c2;
+  border-radius: 10px;
+  border: 3px solid #333029;
+  display: inline-block;
+  cursor: pointer;
+  color: #505739;
+  font-family: Courier New;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.cremeButton:hover {
+  background: linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
+  background-color: #ccc2a6;
+}
+.cremeButton:active {
+  position: relative;
+  top: 1px;
+}
