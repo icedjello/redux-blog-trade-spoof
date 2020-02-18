@@ -53,6 +53,8 @@ class App extends Component {
               },
               {
                 field: 'instrument',
+                rowGroup: true,
+                hide: true
               },
               {
                 field: 'quantity',
@@ -60,7 +62,7 @@ class App extends Component {
               },
               {
                 field: 'price',
-                aggFunc: _priceAggFunc,
+                aggFunc: 'sum',
                 valueFormatter: params => _preFormatter(params, _priceFormatter),
                 cellRenderer: "agAnimateShowChangeCellRenderer"
               },
@@ -72,7 +74,7 @@ class App extends Component {
             ]}
             autoGroupColumnDef={
               {
-                headerName: 'Country',
+                headerName: 'Country/Instrument',
                 flex: 1
               }
             }
@@ -112,17 +114,23 @@ class App extends Component {
   }
 }
 
-const _preFormatter = (params, formatter) => params.node.group ? '' : formatter(params)
 
-const _priceFormatter = params => (Math.round(params.data.price * 100) / 100).toFixed(2)
 
-const _bskFormatter = params => params.data.bsk === 0 ? 'BUY' : params.data.bsk === 1 ? 'SELL' : 'KEEP'
 
-const _priceAggFunc = (values) => {
-  let sum = 0;
-  values.forEach(value => sum += value);
-  return (Math.round(sum * 100) / 100).toFixed(2)
-}
+const _preFormatter = (params, formatter) => params.node.group ? formatter(params.value) : formatter(params.data[params.column.colDef.field])
+
+
+// params.node.group ? formatter(params.value) : 
+
+
+const _priceFormatter = value => (Math.round(value * 100) / 100).toFixed(2)
+// const _priceFormatter = value => 'hello'
+
+
+const _bskFormatter = value => value === 0 ? 'BUY' : value === 1 ? 'SELL' : 'KEEP'
+// const _bskFormatter = value => 'hello'
+
+
 
 const mapStateToProps = state => {
   return {
