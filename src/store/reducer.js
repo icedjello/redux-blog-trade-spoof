@@ -19,8 +19,7 @@ const reducer = (prevState = initialState, action) => {
         ...row,
         quantity: quantityUpdater(row.quantity),
         price: priceUpdater(row.price),
-        bsk: bskUpdater()
-
+        bsk: bskUpdater(),
       }))
       // debugger
       startTime = Date.now()

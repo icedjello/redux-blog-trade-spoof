@@ -8,7 +8,6 @@ import 'ag-grid-enterprise';
 
 import { startTime } from './store/reducer';
 import * as actions from './store/actions';
-import { ValueService } from "ag-grid-community";
 
 class App extends Component {
 
@@ -20,6 +19,14 @@ class App extends Component {
 
   advanceButtonHandler = () => {
     this.props.onAdvance();
+  }
+
+  runButtonHandler = () => {
+    this.props.onRun();
+  }
+
+  stopButtonHandler = () => {
+    this.props.onStop();
   }
 
   render() {
@@ -48,13 +55,8 @@ class App extends Component {
                 field: 'instrument',
               },
               {
-                headerName: 'B/S/K',
-                field: 'bsk',
-                valueFormatter: params => _preFormatter(params, _bskFormatter)
-
-              },
-              {
                 field: 'quantity',
+                aggFunc: 'sum'
               },
               {
                 field: 'price',
@@ -63,12 +65,9 @@ class App extends Component {
                 cellRenderer: "agAnimateShowChangeCellRenderer"
               },
               {
-                headerName: 'High',
-                // hide: true
-              },
-              {
-                headerName: 'Low',
-                // hide: true
+                headerName: 'B/S/K',
+                field: 'bsk',
+                valueFormatter: params => _preFormatter(params, _bskFormatter)
               },
             ]}
             autoGroupColumnDef={
@@ -100,6 +99,14 @@ class App extends Component {
         >
           <button onClick={this.advanceButtonHandler}>Advance</button>
         </div>
+        <div
+          style={{
+            margin: '5px'
+          }}
+        >
+          <button onClick={this.runButtonHandler}>Run</button>
+          <button onClick={this.runButtonHandler}>Stop</button>
+        </div>
       </Fragment>
     );
   }
@@ -116,7 +123,6 @@ const _priceAggFunc = (values) => {
   values.forEach(value => sum += value);
   return (Math.round(sum * 100) / 100).toFixed(2)
 }
-
 
 const mapStateToProps = state => {
   return {
