@@ -15,26 +15,25 @@ export default class BskRenderer extends Component {
   };
 
   recommendation = value => {
-    const buyRec = <button className="buy recommendation">BUY</button>
-    const sellRec = <button className="sell recommendation">SELL</button>
-    const keepRec = <button className="keep recommendation">KEEP</button>
+    const buyRec = <div className="buy recommendation">BUY</div>
+    const sellRec = <div className="sell recommendation">SELL</div>
+    const keepRec = <div className="keep recommendation">KEEP</div>
 
-    return (
-      value === 'BUY' ? buyRec :
-        value === 'SELL' ? sellRec :
-          keepRec
-    );
+    return value === 'BUY' ? buyRec : value === 'SELL' ? sellRec : keepRec
   }
 
-  buyButton = () => <button className="btn btn-buy" onClick={this.handleBuy}>BUY</button>
+  buyButton = () => <button className="buy-sell-button" onClick={this.handleBuy}>BUY</button>
 
-  sellButtons = () => <button className="btn btn-sell" onClick={this.handleSell}>SELL</button>
+  sellButtons = () => <button className="buy-sell-button " onClick={this.handleSell}>SELL</button>
 
-  renderCell = () => <span>{this.recommendation(this.state.value)}{this.buyButton()}{this.sellButtons()}</span>
+  renderCell = value => {
+    const cell = <div className="bskCell">{this.recommendation(this.state.value)}{this.buyButton()}{this.sellButtons()}</div>
+    return value === 'GROUP' ? <div></div> : cell
+  }
 
   render() {
     return (
-      <div>{this.renderCell()}</div>
+      <div>{this.renderCell(this.state.value)}</div>
 
     );
   }

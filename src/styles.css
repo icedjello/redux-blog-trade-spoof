@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Coda&display=swap");
+
 .parent {
   width: 100vw;
   height: 100vh;
@@ -45,11 +47,50 @@
   position: relative;
   top: 1px;
 }
-.btn {
-  height: 20;
+.buy-sell-button {
+  height: 23px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 15%;
+  border-width: 2px;
+  border-color: rgba(49, 47, 47, 0.932);
+  font-family: "Coda";
+  color: #333029;
+  font-size: 1.1em;
+  transition: 0.3s all ease;
 }
+.buy-sell-button:hover {
+  border-color: darkcyan;
+  color: darkcyan;
+}
+.buy {
+  background-color: seagreen;
+}
+.sell {
+  background-color: indianred;
+}
+
+.keep {
+  background-color: peru;
+}
+
+.bskCell {
+  display: flex;
+  flex-direction: row;
+}
+
 .recommendation {
+  height: 25px;
+  border-radius: 5%;
+  border-color: black;
+  border-width: thin;
   width: 60px;
-  background-color: orange;
   margin-right: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-family: "Coda";
+  font-size: medium;
+  color: #333029;
 }

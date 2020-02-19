@@ -83,7 +83,6 @@ class App extends Component {
             autoGroupColumnDef={
               {
                 headerName: 'Country/Instrument',
-                flex: 1
               }
             }
             defaultColDef={{
@@ -92,7 +91,7 @@ class App extends Component {
               flex: 1
             }}
             suppressAggFuncInHeader={true}
-            // groupHideOpenParents={true}
+            // groupHideOpenParents={false}
             frameworkComponents={{ bskRenderer: BskRenderer }}
             rowData={this.props.rowData}
             onGridReady={this.onGridReady.bind(this)}
@@ -136,9 +135,11 @@ class App extends Component {
 
 const _bskGetter = (params) => {
   if (params.node.group) {
-    return
+    return 'GROUP'
   } else {
-    return params.data.price <= 300 ? 'BUY' : params.data.price >= 400 ? 'SELL' : 'KEEP'
+    return params.data.price <= 300 ? 'BUY'
+      : params.data.price >= 400 ? 'SELL'
+        : 'KEEP'
   }
 }
 
