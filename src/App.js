@@ -91,7 +91,6 @@ class App extends Component {
               flex: 1
             }}
             suppressAggFuncInHeader={true}
-            // groupHideOpenParents={false}
             frameworkComponents={{ bskRenderer: BskRenderer }}
             rowData={this.props.rowData}
             onGridReady={this.onGridReady.bind(this)}
@@ -135,12 +134,13 @@ class App extends Component {
 
 const _bskGetter = (params) => {
   if (params.node.group) {
-    return 'GROUP'
-  } else {
-    return params.data.price <= 300 ? 'BUY'
-      : params.data.price >= 400 ? 'SELL'
-        : 'KEEP'
+    return null
   }
+
+  return params.data.price <= 300 ? 'BUY'
+    : params.data.price >= 400 ? 'SELL'
+      : 'KEEP'
+
 }
 
 const _preFormatter = (params, formatter) => params.node.group ? formatter(params.value) : formatter(params.data[params.column.colDef.field])

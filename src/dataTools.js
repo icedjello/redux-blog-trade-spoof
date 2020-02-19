@@ -31,7 +31,7 @@ const initialState = {
   rowData: _makeData(50000)
 }
 
-const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 100)
+const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 10)
 
 const priceUpdater = (prevPrice) => {
   let price = prevPrice;

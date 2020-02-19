@@ -4,6 +4,7 @@ export default class BskRenderer extends Component {
   constructor(props) {
     super(props);
     this.state = { value: props.value }
+    this.node = props.node;
   }
 
   handleBuy = event => {
@@ -28,7 +29,7 @@ export default class BskRenderer extends Component {
 
   renderCell = value => {
     const cell = <div className="bskCell">{this.recommendation(this.state.value)}{this.buyButton()}{this.sellButtons()}</div>
-    return value === 'GROUP' ? <div></div> : cell
+    return this.props.node.group ? <span>-</span> : cell
   }
 
   render() {
