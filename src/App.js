@@ -11,6 +11,8 @@ import './styles.css'
 import { startTime } from './store/reducer';
 import * as actions from './store/actions';
 
+import BskRenderer from './bskRenderer'
+
 class App extends Component {
 
   constructor(props) {
@@ -74,8 +76,8 @@ class App extends Component {
               },
               {
                 headerName: 'B/S/K',
-                field: 'bsk',
-                valueFormatter: params => _preFormatter(params, _bskFormatter)
+                valueGetter: params => _bskGetter(params),
+                cellRenderer: 'bskRenderer'
               },
             ]}
             autoGroupColumnDef={
@@ -90,9 +92,12 @@ class App extends Component {
               flex: 1
             }}
             suppressAggFuncInHeader={true}
+            // groupHideOpenParents={true}
+            frameworkComponents={{ bskRenderer: BskRenderer }}
             rowData={this.props.rowData}
             onGridReady={this.onGridReady.bind(this)}
             deltaRowDataMode={true}
+            groupDefaultExpanded={-1}
             onModelUpdated={() => {
               if (startTime == null) return;
               console.log(`transaction took: ${Date.now() - startTime} milliseconds.`)
@@ -124,10 +129,16 @@ class App extends Component {
               Stop</button>
           </div>
         </div>
-
-
-      </div>
+      </div >
     );
+  }
+}
+
+const _bskGetter = (params) => {
+  if (params.node.group) {
+    return
+  } else {
+    return params.data.price <= 300 ? 'BUY' : params.data.price >= 400 ? 'SELL' : 'KEEP'
   }
 }
 
@@ -135,13 +146,7 @@ const _preFormatter = (params, formatter) => params.node.group ? formatter(param
 
 const _priceFormatter = value => (Math.round(value * 100) / 100).toFixed(2)
 
-const _bskFormatter = value => value === 0 ? 'BUY' : value === 1 ? 'SELL' : 'KEEP'
-
-const mapStateToProps = state => {
-  return {
-    rowData: state.rowData
-  }
-}
+const mapStateToProps = state => { return { rowData: state.rowData } }
 
 const mapDispatchToProps = dispatch => {
   return {

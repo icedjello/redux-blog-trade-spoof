@@ -5,12 +5,12 @@
 }
 
 .button-container {
-  height: 5%;
+  height: 10%;
   background: dimgray;
 }
 
 .ag-theme-balham-dark {
-  height: 95%;
+  height: 90%;
 }
 
 .cremeButton-wrap {
@@ -28,12 +28,14 @@
   cursor: pointer;
   color: #505739;
   font-family: Courier New;
-  font-size: 15px;
+  height: 5vh;
+  width: 5vw;
+  font-size: 0.7vw;
   font-weight: bold;
-  padding: 5px;
-  margin-top: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  margin-top: 2.5vh;
+  margin-bottom: 2.5vh;
 }
 .cremeButton:hover {
   background: linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
@@ -42,4 +44,12 @@
 .cremeButton:active {
   position: relative;
   top: 1px;
+}
+.btn {
+  height: 20;
+}
+.recommendation {
+  width: 60px;
+  background-color: orange;
+  margin-right: 20px;
 }

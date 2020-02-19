@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-import { initialState, bskUpdater, priceUpdater, quantityUpdater } from '../dataTools';
+import { initialState, priceUpdater } from '../dataTools';
 
 
 let startTime = null;
@@ -17,9 +17,8 @@ const reducer = (prevState = initialState, action) => {
     case actionTypes.ADVANCE_ONCE:
       let updatedData = prevState.rowData.map(row => ({
         ...row,
-        quantity: quantityUpdater(row.quantity),
+        // quantity: quantityUpdater(row.quantity),
         price: priceUpdater(row.price),
-        bsk: bskUpdater(),
       }))
       // debugger
       startTime = Date.now()
