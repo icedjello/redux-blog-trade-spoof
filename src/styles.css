@@ -22,26 +22,21 @@
 }
 
 .cremeButton {
-  background: linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
-  background-color: #eae0c2;
+  background: #eae0c2 linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
   border-radius: 10px;
   border: 3px solid #333029;
   display: inline-block;
   cursor: pointer;
   color: #505739;
-  font-family: Courier New;
+  font-family: Courier New, sans-serif;
   height: 5vh;
   width: 5vw;
   font-size: 0.7vw;
   font-weight: bold;
-  margin-left: 1vw;
-  margin-right: 1vw;
-  margin-top: 2.5vh;
-  margin-bottom: 2.5vh;
+  margin: 2.5vh 1vw;
 }
 .cremeButton:hover {
-  background: linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
-  background-color: #ccc2a6;
+  background: #ccc2a6 linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
 }
 .cremeButton:active {
   position: relative;
@@ -49,14 +44,11 @@
 }
 .buy-sell-button {
   height: 23px;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin: 1px 5px;
   border-radius: 15%;
   border-width: 2px;
   border-color: rgba(49, 47, 47, 0.932);
-  font-family: "Coda";
+  font-family: "Coda", sans-serif;
   color: #333029;
   font-size: 1.1em;
   transition: 0.3s all ease;
@@ -90,7 +82,7 @@
   margin-right: 20px;
   text-align: center;
   font-weight: bold;
-  font-family: "Coda";
+  font-family: "Coda",sans-serif;
   font-size: medium;
   color: #333029;
 }
