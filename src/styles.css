@@ -7,41 +7,19 @@
 }
 
 .button-container {
-  height: 10%;
+  height: 8vh;
+  width: 30vw;
   background: dimgray;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1vh;
 }
 
 .ag-theme-balham-dark {
-  height: 90%;
+  height: 92vh;
 }
 
-.cremeButton-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cremeButton {
-  background: #eae0c2 linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
-  border-radius: 10px;
-  border: 3px solid #333029;
-  display: inline-block;
-  cursor: pointer;
-  color: #505739;
-  font-family: Courier New, sans-serif;
-  height: 5vh;
-  width: 5vw;
-  font-size: 0.7vw;
-  font-weight: bold;
-  margin: 2.5vh 1vw;
-}
-.cremeButton:hover {
-  background: #ccc2a6 linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
-}
-.cremeButton:active {
-  position: relative;
-  top: 1px;
-}
 .buy-sell-button {
   height: 23px;
   margin: 1px 5px;
@@ -50,7 +28,7 @@
   border-color: rgba(49, 47, 47, 0.932);
   font-family: "Coda", sans-serif;
   color: #333029;
-  font-size: 1.1em;
+  font-size: 12px;
   transition: 0.3s all ease;
 }
 .buy-sell-button:hover {
@@ -65,7 +43,7 @@
 }
 
 .keep {
-  background-color: peru;
+  background-color: #cd853f;
 }
 
 .bskCell {

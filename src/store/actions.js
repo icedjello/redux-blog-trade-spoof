@@ -29,4 +29,24 @@ export const stop = (interval) => {
     return {
         type: actionTypes.STOP
     }
-}
+};
+
+export const buy = () => {
+    return {
+        type: actionTypes.BUY,
+        // payload: {
+        //     value,
+        //     id
+        // }
+    }
+};
+
+export const sell = () => {
+    return {
+        type: actionTypes.SELL,
+        // payload: {
+        //     value,
+        //     id
+        // }
+    }
+};

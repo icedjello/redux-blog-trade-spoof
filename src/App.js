@@ -13,6 +13,8 @@ import * as actions from './store/actions';
 
 import BskRenderer from './bskRenderer'
 
+export const ContextForRun = React.createContext(undefined);
+
 class App extends Component {
 
     constructor(props) {
@@ -48,87 +50,86 @@ class App extends Component {
                 <div
                     className='ag-theme-balham-dark'
                 >
-                    <AgGridReact
-                        columnDefs={[
-                            {
-                                field: 'id',
-                                hide: true
-                            },
-                            {
-                                field: 'country',
-                                rowGroup: true,
-                                hide: true
-                            },
-                            {
-                                field: 'instrument',
-                                rowGroup: true,
-                                hide: true
-                            },
-                            {
-                                field: 'quantity',
-                                aggFunc: 'sum'
-                            },
-                            {
-                                field: 'price',
-                                aggFunc: 'sum',
-                                valueFormatter: params => _preFormatter(params, _priceFormatter),
-                                cellRenderer: "agAnimateShowChangeCellRenderer"
-                            },
-                            {
-                                headerName: 'B/S/K',
-                                valueGetter: params => _bskGetter(params),
-                                cellRenderer: 'bskRenderer'
-                            },
-                        ]}
-                        autoGroupColumnDef={
-                            {
-                                headerName: 'Country/Instrument',
+                    <ContextForRun.Provider value={this.props.running}>
+                        <AgGridReact
+                            columnDefs={[
+                                {
+                                    field: 'id',
+                                    hide: true
+                                },
+                                {
+                                    field: 'country',
+                                    rowGroup: true,
+                                    hide: true
+                                },
+                                {
+                                    field: 'instrument',
+                                    rowGroup: true,
+                                    hide: true
+                                },
+                                {
+                                    field: 'quantity',
+                                    aggFunc: 'sum'
+                                },
+                                {
+                                    field: 'price',
+                                    aggFunc: 'sum',
+                                    valueFormatter: params => _preFormatter(params, _priceFormatter),
+                                    cellRenderer: "agAnimateShowChangeCellRenderer"
+                                },
+                                {
+                                    headerName: 'B/S/K',
+                                    valueGetter: params => _bskGetter(params),
+                                    cellRenderer: 'bskRenderer',
+                                    cellRendererParams: {
+                                        buyButton: this.props.onBuy,
+                                        sellButton: this.props.onSell
+                                    }
+                                },
+                            ]}
+                            autoGroupColumnDef={
+                                {
+                                    headerName: 'Country/Instrument',
+                                }
                             }
-                        }
-                        defaultColDef={{
-                            filter: true,
-                            sortable: true,
-                            flex: 1
-                        }}
-                        suppressAggFuncInHeader={true}
-                        frameworkComponents={{bskRenderer: BskRenderer}}
-                        rowData={this.props.rowData}
-                        onGridReady={this.onGridReady.bind(this)}
-                        deltaRowDataMode={true}
-                        groupDefaultExpanded={-1}
-                        onModelUpdated={() => {
-                            if (startTime == null) return;
-                            console.log(`transaction took: ${Date.now() - startTime} milliseconds.`)
-                        }}
-                        getRowNodeId={data => data.id}>
-                    </AgGridReact>
+                            defaultColDef={{
+                                filter: true,
+                                sortable: true,
+                                flex: 1
+                            }}
+                            suppressAggFuncInHeader={true}
+                            frameworkComponents={{bskRenderer: BskRenderer}}
+                            rowData={this.props.rowData}
+                            onGridReady={this.onGridReady.bind(this)}
+                            deltaRowDataMode={true}
+                            groupDefaultExpanded={-1}
+                            onModelUpdated={() => {
+                                if (startTime == null) return;
+                                console.log(`transaction took: ${Date.now() - startTime} milliseconds.`)
+                            }}
+                            getRowNodeId={data => data.id}>
+                        </AgGridReact>
+                    </ContextForRun.Provider>
                 </div>
 
                 <div
                     className='button-container'
                 >
-                    <div
-                        className='cremeButton-wrap'
-                    >
-                        <button
-                            className='cremeButton'
-                            onClick={this.advanceButtonHandler}
-                        >
-                            Advance
-                        </button>
-                        <button
-                            className='cremeButton'
-                            onClick={this.runButtonHandler}
-                        >
-                            Run
-                        </button>
-                        <button
-                            className='cremeButton'
-                            onClick={this.stopButtonHandler}
-                        >
-                            Stop
-                        </button>
-                    </div>
+                    <button
+                        className='buy-sell-button'
+                        onClick={this.advanceButtonHandler}
+                    >Advance
+                    </button>
+                    <button
+                        className='buy-sell-button'
+                        onClick={this.runButtonHandler}
+                    >Run
+                    </button>
+                    <button
+                        className='buy-sell-button'
+                        onClick={this.stopButtonHandler}
+                    >Stop
+                    </button>
                 </div>
             </div>
         );
@@ -163,7 +164,9 @@ const mapDispatchToProps = dispatch => {
         onInitRowData: rowData => dispatch(actions.initRowData(rowData)),
         onAdvance: () => dispatch(actions.advance()),
         onRun: () => dispatch(actions.run()),
-        onStop: (interval) => dispatch(actions.stop(interval))
+        onStop: (interval) => dispatch(actions.stop(interval)),
+        onBuy: (params) => dispatch(actions.buy(params)),
+        onSell: (params) => dispatch(actions.sell(params))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
