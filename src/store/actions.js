@@ -31,22 +31,16 @@ export const stop = (interval) => {
     }
 };
 
-export const buy = () => {
+export const buy = (id) => {
     return {
         type: actionTypes.BUY,
-        // payload: {
-        //     value,
-        //     id
-        // }
+        payload: id
     }
 };
 
-export const sell = () => {
+export const sell = (id) => {
     return {
         type: actionTypes.SELL,
-        // payload: {
-        //     value,
-        //     id
-        // }
+        payload: id
     }
 };

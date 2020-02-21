@@ -9,13 +9,11 @@ export default class BskRenderer extends Component {
     }
 
     handleBuy = event => {
-        // this.setState({value: event.target.value});
-        this.props.buyButton({rowIndex: this.params.rowIndex, colKey: this.params.colKey})
+        this.props.buyButton(this.node.id)
     };
 
     handleSell = event => {
-        // this.setState({value: event.target.value});
-        this.props.buyButton({rowIndex: this.params.rowIndex, colKey: this.params.colKey})
+        this.props.sellButton(this.node.id)
     };
 
     recommendation = value => {

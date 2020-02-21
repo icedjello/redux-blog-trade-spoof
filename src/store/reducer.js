@@ -43,18 +43,24 @@ const reducer = (prevState = initialState, action) => {
       };
 
     case actionTypes.BUY:
-      console.log('BUY');
-      let updatedData = prevState.rowData.map(row => ({
+      let updatedBuyData = prevState.rowData.map(row => ({
         ...row,
-        price: priceUpdater(row.price),
+        quantity: row.id === action.payload ? (row.quantity > 100 ? (row.quantity - 100) : 0) : row.quantity
       }));
-      debugger;
       return {
         ...prevState,
+        rowData: updatedBuyData
       };
 
     case actionTypes.SELL:
-      return {};
+      let updatedSellData = prevState.rowData.map(row => ({
+        ...row,
+        quantity: row.id === action.payload ? row.quantity + 100 : row.quantity
+      }));
+      return {
+        ...prevState,
+        rowData: updatedSellData
+      };
 
     default: return prevState;
   }
