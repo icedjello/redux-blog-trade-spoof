@@ -8,13 +8,14 @@ export default class BskRenderer extends Component {
         this.node = props.node;
     }
 
+    handleSell = event => {
+        this.props.sellButton(this.node.id)
+    };
+
     handleBuy = event => {
         this.props.buyButton(this.node.id)
     };
 
-    handleSell = event => {
-        this.props.sellButton(this.node.id)
-    };
 
     recommendation = value => {
         const buyRec = <div className="buy recommendation">BUY</div>;
@@ -23,17 +24,15 @@ export default class BskRenderer extends Component {
 
         return value === 'BUY' ? buyRec : value === 'SELL' ? sellRec : keepRec
     };
-
-    buyButton = () => {
-        // debugger;
+    sellButton = () => {;
         return (
-                <button className="buy-sell-button" onClick={this.handleBuy}>BUY</button>
+                <button className="buy-sell-button" onClick={this.handleSell}>SELL</button>
         );
     };
 
-    sellButtons = () => {
+    buyButton = () => {
         return (
-                <button className="buy-sell-button " onClick={this.handleSell}>SELL</button>
+                <button className="buy-sell-button " onClick={this.handleBuy}>BUY</button>
         )
     };
 
@@ -42,7 +41,7 @@ export default class BskRenderer extends Component {
         const cell = <div className="bskCell">
             {this.recommendation(this.state.value)}
             {this.buyButton()}
-            {this.sellButtons()}
+            {this.sellButton()}
         </div>;
         if (running != null) return this.recommendation(this.state.value);
         return this.props.node.group ? grouped : cell
@@ -60,3 +59,5 @@ export default class BskRenderer extends Component {
         );
     }
 };
+
+

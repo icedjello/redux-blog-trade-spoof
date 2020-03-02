@@ -8,7 +8,7 @@ const _makeData = (rows) => {
       'id': i + 1,
       'country': _countryGen(),
       'instrument': _instrumentGen(),
-      'quantity': _quantityGen(),
+      'quantity': _quantityGen(i),
       'price': _priceGen(),
     };
     rowData.push(row)
@@ -16,19 +16,56 @@ const _makeData = (rows) => {
   return rowData
 };
 
+
+const rowsWtihQuantity = [];
+
+for(let i =0; i<100; i++){
+  let rowIndexWithQuantity = Math.round(Math.random()* 50000);
+  if(!rowsWtihQuantity.includes(rowsWtihQuantity)){
+    rowsWtihQuantity.push(rowIndexWithQuantity)
+  }else{
+    while(rowsWtihQuantity.includes(rowIndexWithQuantity)){
+      rowIndexWithQuantity++
+      break;
+    }
+  }
+}
+
 const _randomNumGenerator = (max) => Math.round(Math.random() * max);
 
 const _countryGen = () => countries[_randomNumGenerator(countries.length)];
 
 const _instrumentGen = () => instruments[_randomNumGenerator(110)];
 
-const _quantityGen = () => (_randomNumGenerator(8000) + 1000);
+const _quantityGen = (index) => {
+  if(rowsWtihQuantity.includes(index)){
+    return _randomNumGenerator(25)
+  }
+    return 0
+};
+
 
 const _priceGen = () => parseFloat(`${_randomNumGenerator(299) + 200}.${_randomNumGenerator(99)}`);
 
+const rowData = _makeData(50000);
+
+const _calculateNetValue = (rows) =>{
+  let totalNetValue = 0;
+  rows.forEach(row => {
+    if(row.quantity > 0){
+      let netOfRow = row.quantity * row.price;
+      totalNetValue = Number((netOfRow + totalNetValue).toFixed(2));
+    }
+  });
+  return Number(totalNetValue.toFixed(2));
+}
 
 const initialState = {
-  rowData: _makeData(50000)
+  rowData: rowData,
+  sellAmount: 100,
+  buyAmount: 100,
+  balance: 100000,
+  netValue: _calculateNetValue(rowData)
 };
 
 const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 10);
@@ -45,14 +82,5 @@ const priceUpdater = (prevPrice) => {
   return price;
 };
 
-// const quantityUpdater = (prevQuantity) => {
-//   let amount = prevQuantity
-//   if (_randomNumGenerator(1) === 0) {
-//     amount -= _fluctuation(prevQuantity)
-//   } else {
-//     amount += _fluctuation(prevQuantity)
-//   }
-//   return amount;
-// }
 
 export { initialState, priceUpdater };

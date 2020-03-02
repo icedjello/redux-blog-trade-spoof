@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {AgGridReact} from 'ag-grid-react';
@@ -6,6 +7,8 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
 import 'ag-grid-enterprise';
 
+import Slider from '@material-ui/core/Slider';
+import Tooltip from '@material-ui/core/Tooltip';
 import './styles.css'
 
 import {startTime} from './store/reducer';
@@ -15,18 +18,22 @@ import BskRenderer from './bskRenderer'
 
 export const ContextForRun = React.createContext(undefined);
 
+
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {};
+
     }
+
 
     onGridReady(params) {
         this.gridApi = params.api;
         this.gridColumnApi = params.columnApi;
         console.log('The grid is ready!')
     }
+
 
     advanceButtonHandler = () => {
         this.props.onAdvance()
@@ -42,15 +49,57 @@ class App extends Component {
         this.props.onStop(this.props.running)
     };
 
+    handleSellValueChange = (val) => {
+        this.props.updateSellAmount(val)
+    };
+    
+    handleBuyValueChange = (val) => {
+        this.props.updateBuyAmount(val)
+    };
+    
+   
     render() {
         return (
             <div
-                className='parent'
+            className='parent'
             >
                 <div
                     className='ag-theme-balham-dark'
-                >
+                    >
                     <ContextForRun.Provider value={this.props.running}>
+                        <div className='sliderContainer'>
+                            <label>Sell amount:</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        <Slider
+                            onChange = {(e, val)=>{
+                                this.handleSellValueChange(val);
+                            }}
+                            name="sellSlider"
+                            ValueLabelComponent={ValueLabelComponent}
+                            aria-label="custom thumb label"
+                            defaultValue={DEFAULT_BUY_SELL_VALUE}
+                            />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label id='sellSliderValueLabel'>{this.props.sellAmount}</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label>Buy amount:</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Slider
+                            onChange = {(e, val)=>{
+                                this.handleBuyValueChange(val)
+                            }}
+                            name="buySlider"
+                            ValueLabelComponent={ValueLabelComponent}
+                            aria-label="custom thumb label"
+                            defaultValue={DEFAULT_BUY_SELL_VALUE}
+                        />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label id='buySliderValueLabel'>{this.props.buyAmount}</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>Balance: {this.props.balance}</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>Net Value: {this.props.netValue}</label>
+                        </div>
                         <AgGridReact
                             columnDefs={[
                                 {
@@ -81,10 +130,13 @@ class App extends Component {
                                     headerName: 'B/S/K',
                                     valueGetter: params => _bskGetter(params),
                                     cellRenderer: 'bskRenderer',
-                                    cellRendererParams: {
-                                        buyButton: this.props.onBuy,
-                                        sellButton: this.props.onSell
-                                    }
+                                    cellRendererParams: (params)=>{
+                                        return{
+                                        buyButton: ()=>this.props.onBuy(params.data.id, this.props.buyAmount),
+                                        sellButton: ()=>this.props.onSell(params.data.id, this.props.sellAmount),
+                                        getBalance: ()=>  this.props.balance,
+                                        getSellAmount: ()=> this.props.sellAmount
+                                    }}
                                 },
                             ]}
                             autoGroupColumnDef={
@@ -136,13 +188,17 @@ class App extends Component {
     }
 }
 
+
+
+const DEFAULT_BUY_SELL_VALUE = 100;
+
 const _bskGetter = (params) => {
     if (params.node.group) {
         return null
     }
 
-    return params.data.price <= 300 ? 'BUY'
-        : params.data.price >= 400 ? 'SELL'
+    return Math.round((params.data.price * Math.random(0, 3))) % 3 === 0 ? 'BUY'
+        : Math.round((params.data.price * Math.random(0, 3))) % 2 === 0 ? 'SELL'
             : 'KEEP'
 };
 
@@ -153,10 +209,29 @@ const _priceFormatter = value => (Math.round(value * 100) / 100).toFixed(2);
 const mapStateToProps = state => {
     return {
         rowData: state.rowData,
-        running: state.running
+        running: state.running,
+        sellAmount: state.sellAmount,
+        buyAmount: state.buyAmount,
+        balance: state.balance,
+        netValue: state.netValue
     }
 };
 
+function ValueLabelComponent(props) {
+    const { children, open, value } = props;
+  
+    return (
+      <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
+        {children}
+      </Tooltip>
+    );
+  }
+  
+  ValueLabelComponent.propTypes = {
+    children: PropTypes.element.isRequired,
+    open: PropTypes.bool.isRequired,
+    value: PropTypes.number.isRequired,
+  };
 
 const mapDispatchToProps = dispatch => {
 
@@ -165,8 +240,10 @@ const mapDispatchToProps = dispatch => {
         onAdvance: () => dispatch(actions.advance()),
         onRun: () => dispatch(actions.run()),
         onStop: (interval) => dispatch(actions.stop(interval)),
-        onBuy: (params) => dispatch(actions.buy(params)),
-        onSell: (params) => dispatch(actions.sell(params))
+        onBuy: (id, quantity) => dispatch(actions.buy(id, quantity)),
+        onSell: (id, quantity) => dispatch(actions.sell(id, quantity)),
+        updateSellAmount: (amount) => dispatch(actions.updateSellAmount(amount)),
+        updateBuyAmount: (amount) => dispatch(actions.updateBuyAmount(amount))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

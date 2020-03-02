@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 1vh;
+  padding: 3.5vh;
 }
 
 .ag-theme-balham-dark {
@@ -63,4 +63,12 @@
   font-family: "Coda",sans-serif;
   font-size: medium;
   color: #333029;
+}
+
+.sliderContainer {
+  max-height: 50px;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+
 }
