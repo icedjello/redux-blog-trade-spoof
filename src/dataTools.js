@@ -54,7 +54,7 @@ const _calculateNetValue = (rows) =>{
   rows.forEach(row => {
     if(row.quantity > 0){
       let netOfRow = row.quantity * row.price;
-      totalNetValue = Number((netOfRow + totalNetValue).toFixed(2));
+      totalNetValue = Number((netOfRow + totalNetValue).toFixed(4));
     }
   });
   return Number(totalNetValue.toFixed(2));
@@ -68,17 +68,20 @@ const initialState = {
   netValue: _calculateNetValue(rowData)
 };
 
-const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 10);
+const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 2);
 
 const priceUpdater = (prevPrice) => {
   let price = prevPrice;
   let fluctuation = _fluctuation(prevPrice);
-
+if(price>100){
   if (_randomNumGenerator(1) === 0) {
     price -= fluctuation;
   } else {
     price += fluctuation;
   }
+}else{
+  price +=100
+}
   return price;
 };
 

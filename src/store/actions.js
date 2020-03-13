@@ -31,17 +31,17 @@ export const stop = (interval) => {
     }
 };
 
-export const buy = (id, amount) => {
+export const buy = (id, amount, price) => {
     return {
         type: actionTypes.BUY,
-        payload: {id: id, buyAmount: amount}
+        payload: {id: id, buyAmount: amount, buyPrice: price}
     }
 };
 
-export const sell = (id, amount) => {
+export const sell = (id, amount, price, quantity) => {
     return {
         type: actionTypes.SELL,
-        payload: {id: id, sellAmount: amount}
+        payload: {id: id, sellAmount: amount, sellPrice: price, quantity: quantity }
     }
 };
 

@@ -7,17 +7,19 @@
 }
 
 .button-container {
-  height: 8vh;
+  height: 2vh;
   width: 30vw;
   background: dimgray;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 3.5vh;
+  padding: 4.5vh;
 }
 
 .ag-theme-balham-dark {
-  height: 92vh;
+  height: 100vh !important;
+  width: 100vw !important;
+
 }
 
 .buy-sell-button {
@@ -66,9 +68,17 @@
 }
 
 .sliderContainer {
-  max-height: 50px;
+  /* max-height: 150px; */
   max-width: 1200px;
   display: flex;
   flex-direction: row;
 
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  text-decoration: line-through;
 }
