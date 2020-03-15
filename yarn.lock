@@ -1720,9 +1720,9 @@ acorn-walk@^6.0.1:
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
 acorn@^5.5.3:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-  integrity sha512-T/zvzYRfbVojPWahDsE5evJdHb3oJoQfFbsrKM7w5Zcs++Tr257tia3BmMP8XYVjp1S9RZXQMh7gao96BlqZOw==
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+  integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
 acorn@^6.0.1, acorn@^6.0.4, acorn@^6.2.1:
   version "6.4.0"
@@ -1750,20 +1750,20 @@ adjust-sourcemap-loader@2.0.0:
     object-path "0.11.4"
     regex-parser "2.2.10"
 
-ag-grid-community@^21.0.0:
-  version "21.2.2"
-  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-21.2.2.tgz#a5696a303fa04d03d26e4c9e09e114d308ff4ad4"
-  integrity sha512-x8kQmynYM/7zoigs7wIe7DkK1TIlUP5N1TYrGPsK8vO2gN+rqOok9csGPy4YamggWTcSxpy7wji/Kcz/gUp8/w==
+ag-grid-community@^22.1.1:
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-22.1.1.tgz#279d0b4a3ab199dc647714add0d2d393a75315cb"
+  integrity sha512-FNyv9e9JIuuR8NNi/r3NjIjUVy2/K5GgPjwQ63g9/Z4U8EudQZLINGMVKI6OwtZfWyyNSd0hQDCNsdvx0OR1WQ==
 
-ag-grid-enterprise@^21.0.0:
-  version "21.2.2"
-  resolved "https://registry.yarnpkg.com/ag-grid-enterprise/-/ag-grid-enterprise-21.2.2.tgz#9e32b6cee5a13e644c9b174f245c96ff63b7b37b"
-  integrity sha512-tmJh9bjSuAFg4CtQ+o+ygl/uXqPZg13p+heR73DxT20WhkA+/WYljQRBzyNyjs4C1GbdkPqWj9pSIu2klOU6Bw==
+ag-grid-enterprise@^22.1.1:
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-enterprise/-/ag-grid-enterprise-22.1.1.tgz#ed052ac20ba817c9cb187d8bd7e82b0d248a48a8"
+  integrity sha512-TLZi9++lrxlCQY2SI+5b4VXDP2O/P0ssUQSelifA2CvwwGzQcPkPWZQKrIHlCkIHBuBoJ9OiEw7GX3AIuoBUug==
 
-ag-grid-react@^21.0.0:
-  version "21.2.2"
-  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-21.2.2.tgz#55f19eb3bb14a3beddd642adb0bb03da1249ae59"
-  integrity sha512-QlTtLMsBgLMPzqP95KoOUxXfCwVoYpLOF0uiZeVouHXUR/WxZXlsgtcyOPueKwDGWKBQ+qxB0+3JV5q+mSrPXw==
+ag-grid-react@^22.1.1:
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-22.1.1.tgz#59a8ad8e72263e47ccf12718f045dccc425c5f06"
+  integrity sha512-zMz2R3pyo2hEw+GUL0YcsrcMFPxcs7ZjMyhBJpqxfMT/EdwFEGupsrRHKZQjxTaEAgawDhx8Rzt8dNFBLNk3qw==
   dependencies:
     prop-types "^15.6.2"
 
