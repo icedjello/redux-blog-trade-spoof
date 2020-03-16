@@ -85,10 +85,10 @@ class App extends Component {
                 className='parent'
             >
                 <div
-                    // style={{
-                    //     height: "100%",
-                    //     width: "100%"
-                    //   }}
+                    style={{
+                        height: "90%",
+                        width: "100%"
+                      }}
                     className='ag-theme-balham-dark'
                 >
                     <ContextForRun.Provider value={{running: this.props.running, balance:this.props.balance}}>
@@ -173,8 +173,6 @@ class App extends Component {
                                     },
                                     valueParser: (params) => {
                                         return Number(params.newValue)
-                                        // params.data.quantity = Number(params.newValue)
-                                        // return true
                                     },
                                     editable: () => { if (this.props.running) { return false } return true },
 
@@ -232,7 +230,7 @@ class App extends Component {
                             frameworkComponents={{ bskRenderer: BskRenderer }}
                             rowData={this.props.rowData}
                             onGridReady={this.onGridReady.bind(this)}
-                            //getMainMenuItems={this.getMainMenuItems.bind(this)}
+                            getMainMenuItems={this.getMainMenuItems.bind(this)}
                             onCellValueChanged={this.onCellValueChanged}
                             deltaRowDataMode={true}
                             sideBar={true}
