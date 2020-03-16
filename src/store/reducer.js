@@ -24,7 +24,7 @@ let _reduceUpdater = (prevState) => {
   }
 };
 
-function getBuyAmount(unitaryPrice, prevState, amountToBuy) {
+function getActualBuyAmount(unitaryPrice, prevState, amountToBuy) {
           let unitaryPencePrice = unitaryPrice * 100;
           let previousPenceBalance = prevState.balance * 100;
           
@@ -38,7 +38,7 @@ function getBuyAmount(unitaryPrice, prevState, amountToBuy) {
           return amountToBuy
 }
 
-function getMaxSellAmount(quantity, sellAmount){
+function getActualSellAmount(quantity, sellAmount){
   if (quantity >= sellAmount) {
       return sellAmount
   }
@@ -74,10 +74,10 @@ const reducer = (prevState = initialState, action) => {
 
 
     case actionTypes.BUY:
-      let unitaryPrice = action.payload.buyPrice;
-      let amountToBuy = action.payload.buyAmount;
-      let maxAmountToBuy = getBuyAmount(unitaryPrice, prevState, amountToBuy);                 
-      let newBalance = prevState.balance - (maxAmountToBuy * unitaryPrice)      
+      let buyPrice = action.payload.buyPrice;
+      let attemptedAmountToBuy = action.payload.buyAmount;
+      let actualAmountToBuy = getActualBuyAmount(buyPrice, prevState, attemptedAmountToBuy);                 
+      let newBalance = prevState.balance - (actualAmountToBuy * buyPrice)      
 
 
       let updatedBuyData = prevState.rowData.map(row => {
@@ -87,7 +87,7 @@ const reducer = (prevState = initialState, action) => {
           }       
           return {
             ...row,
-            quantity: row.quantity + maxAmountToBuy
+            quantity: row.quantity + actualAmountToBuy
           }
         }
       );
@@ -104,8 +104,8 @@ const reducer = (prevState = initialState, action) => {
       let rowQuantity = action.payload.quantity
       let attemptedSellAmount = action.payload.sellAmount
       let sellPrice = action.payload.sellPrice
-      let maxSellAmount = getMaxSellAmount(rowQuantity, attemptedSellAmount)
-      let newBalanceAfterSell = prevState.balance + (maxSellAmount * sellPrice)
+      let actualSellAmount = getActualSellAmount(rowQuantity, attemptedSellAmount)
+      let newBalanceAfterSell = prevState.balance + (actualSellAmount * sellPrice)
 
       let updatedSellData = prevState.rowData.map(row => {
         let selectedRow = (row.id === action.payload.id)
@@ -115,7 +115,7 @@ const reducer = (prevState = initialState, action) => {
       
         return {
           ...row,
-          quantity: rowQuantity - maxSellAmount
+          quantity: rowQuantity - actualSellAmount
         }          
       })
 

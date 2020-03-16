@@ -17,19 +17,27 @@ const _makeData = (rows) => {
 };
 
 
-const rowsWtihQuantity = [];
 
-for(let i =0; i<100; i++){
-  let rowIndexWithQuantity = Math.round(Math.random()* 50000);
-  if(!rowsWtihQuantity.includes(rowsWtihQuantity)){
-    rowsWtihQuantity.push(rowIndexWithQuantity)
-  }else{
-    while(rowsWtihQuantity.includes(rowIndexWithQuantity)){
-      rowIndexWithQuantity++
-      break;
+
+const giveRowsQuantity = () =>{  
+let rowsWtihQuantity = [];
+
+  for (let i = 0; i < 100; i++) {
+    let rowIndexWithQuantity = Math.round(Math.random() * 50000);
+    if (!rowsWtihQuantity.includes(rowIndexWithQuantity)) {
+      rowsWtihQuantity.push(rowIndexWithQuantity)
+    }
+    else {
+      while (rowsWtihQuantity.includes(rowIndexWithQuantity)) {
+        rowIndexWithQuantity++
+        break;
+      }
     }
   }
+  return rowsWtihQuantity;
 }
+
+const rowsWtihQuantity = giveRowsQuantity();
 
 const _randomNumGenerator = (max) => Math.round(Math.random() * max);
 
@@ -38,10 +46,11 @@ const _countryGen = () => countries[_randomNumGenerator(countries.length)];
 const _instrumentGen = () => instruments[_randomNumGenerator(110)];
 
 const _quantityGen = (index) => {
-  if(rowsWtihQuantity.includes(index)){
+
+  if (rowsWtihQuantity.includes(index)) {
     return _randomNumGenerator(25)
   }
-    return 0
+  return 0
 };
 
 
@@ -49,10 +58,10 @@ const _priceGen = () => parseFloat(`${_randomNumGenerator(299) + 200}.${_randomN
 
 const rowData = _makeData(50000);
 
-const _calculateNetValue = (rows) =>{
+const _calculateNetValue = (rows) => {
   let totalNetValue = 0;
   rows.forEach(row => {
-    if(row.quantity > 0){
+    if (row.quantity > 0) {
       let netOfRow = row.quantity * row.price;
       totalNetValue = Number((netOfRow + totalNetValue).toFixed(4));
     }
@@ -73,15 +82,15 @@ const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 2);
 const priceUpdater = (prevPrice) => {
   let price = prevPrice;
   let fluctuation = _fluctuation(prevPrice);
-if(price>100){
-  if (_randomNumGenerator(1) === 0) {
-    price -= fluctuation;
+  if (price > 100) {
+    if (_randomNumGenerator(1) === 0) {
+      price -= fluctuation;
+    } else {
+      price += fluctuation;
+    }
   } else {
-    price += fluctuation;
+    price += 100
   }
-}else{
-  price +=100
-}
   return price;
 };
 

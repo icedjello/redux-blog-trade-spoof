@@ -41,7 +41,7 @@ export const buy = (id, amount, price) => {
 export const sell = (id, amount, price, quantity) => {
     return {
         type: actionTypes.SELL,
-        payload: {id: id, sellAmount: amount, sellPrice: price, quantity: quantity }
+        payload: {id: id, sellAmount: amount, sellPrice: price, quantity: quantity}
     }
 };
 

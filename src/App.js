@@ -86,14 +86,14 @@ class App extends Component {
             >
                 <div
                     style={{
-                        height: "90%",
+                        height: "100%",
                         width: "100%"
                       }}
                     className='ag-theme-balham-dark'
                 >
                     <ContextForRun.Provider value={{running: this.props.running, balance:this.props.balance}}>
-                        <div className='sliderContainer'>
-                            <label>Sell amount:</label>
+                        <div className='nonGridContainer'>
+                            <label className = 'nonGridContainerElements'>Sell amount:</label>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         <Slider
                                 onChange={(event, val) => {
@@ -101,13 +101,12 @@ class App extends Component {
                                 }}
                                 name="sellSlider"
                                 ValueLabelComponent={ValueLabelComponent}
-                                aria-label="custom thumb label"
                                 defaultValue={DEFAULT_BUY_SELL_VALUE}
                             />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label id='sellSliderValueLabel'>{this.props.sellAmount}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Buy amount:</label>
+                        <label className = 'nonGridContainerElements'>{this.props.sellAmount}</label>
+                            &nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;
+                        <label className = 'nonGridContainerElements'>Buy amount:</label>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <Slider
                                 onChange={(event, val) => {
@@ -115,15 +114,30 @@ class App extends Component {
                                 }}
                                 name="buySlider"
                                 ValueLabelComponent={ValueLabelComponent}
-                                aria-label="custom thumb label"
                                 defaultValue={DEFAULT_BUY_SELL_VALUE}
                             />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label id='buySliderValueLabel'>{this.props.buyAmount}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label>Net Value: {balanceAndNetValueFormatter(this.props.netValue)}</label>
+                        <label className = 'nonGridContainerElements'>{this.props.buyAmount}</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label className = 'nonGridContainerElements'>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label className = 'nonGridContainerElements'>Net Value: {balanceAndNetValueFormatter(this.props.netValue)}</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+                        <button
+                        className='buy-sell-button'
+                        onClick={this.advanceButtonHandler}
+                    >Advance
+                    </button>
+                    <button
+                        className='buy-sell-button'
+                        onClick={this.runButtonHandler}
+                    >Run
+                    </button>
+                    <button
+                        className='buy-sell-button'
+                        onClick={this.stopButtonHandler}
+                    >Stop
+                    </button>
                         </div>
                         <AgGridReact
                             columnDefs={[
@@ -150,6 +164,9 @@ class App extends Component {
                                     field: 'quantity',
                                     aggFunc: 'sum',
                                     filter: "agNumberColumnFilter",
+                                    filterParams:{
+                                        type: 'lessThan'
+                                    },
                                     floatingFilterComponentParams: { suppressFilterButton: true },
                                     onCellValueChanged: (event) => {
                                         
@@ -246,23 +263,9 @@ class App extends Component {
                 </div>
 
                 <div
-                    className='button-container'
+                    className='nonGridContainer'
                 >
-                    <button
-                        className='buy-sell-button'
-                        onClick={this.advanceButtonHandler}
-                    >Advance
-                    </button>
-                    <button
-                        className='buy-sell-button'
-                        onClick={this.runButtonHandler}
-                    >Run
-                    </button>
-                    <button
-                        className='buy-sell-button'
-                        onClick={this.stopButtonHandler}
-                    >Stop
-                    </button>
+
                 </div>
             </div>
         );
