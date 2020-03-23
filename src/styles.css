@@ -15,8 +15,7 @@
 }
 
 .verticalDivider {
-  /* border-left: 2px solid #3f47b8; */
-  border-left: 2px solid black;
+  border-left: 1px solid rgb(77, 76, 76);
   height: 20px;
 }
 
@@ -51,6 +50,16 @@
   flex-direction: row;
 }
 
+.bskCell button {
+  line-height: initial;
+}
+
+
+.secondRowMaker{
+  flex-basis: 100%;
+  height: 0;
+}
+
 .recommendation {
   height: 25px;
   border-radius: 5%;
@@ -65,12 +74,35 @@
   color: #333029;
 }
 
+.secondRow {
+  display:flex;
+  align-items: center;
+  width:100%;
+}
+
+.secondRow .nonGridContainerElements {
+  color: black;
+}
+
+.secondRow .button-container {
+  display:flex;
+  align-items: center;
+  width:100%;
+  justify-content: center;
+}
+
+.slider-container {
+  display:flex;
+  align-items: center;
+  width: 80%;
+}
+
 .nonGridContainer {
-  /* max-height: 150px; */
   max-width: 1600px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
 
 }
 

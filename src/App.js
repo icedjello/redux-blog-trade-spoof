@@ -36,15 +36,14 @@ class App extends Component {
 
 
 
-    removeNaNValues(rowData, event){
-        let noNaNRowData = rowData.map(row=>{
-            if(row.id===event.data.id){
-                console.log(event.oldValue)
-                return {
+    removeNaNValues(rowData, event) {
+        let noNaNRowData = rowData.map(row => {
+            if (row.id === event.data.id) {
+              return {
                     ...row,
                     quantity: event.oldValue
-                    }
-                    
+                }
+
             }
             return row
         })
@@ -73,11 +72,6 @@ class App extends Component {
         this.props.updateBuyAmount(val)
     };
 
-    getMainMenuItems(params){
-        let updatedMenuItems = params.defaultItems.filter(item =>!(item==='autoSizeAll' || item === 'autoSizeThis'));
-        return updatedMenuItems;
-    };
-
 
     render() {
         return (
@@ -88,13 +82,28 @@ class App extends Component {
                     style={{
                         height: "100%",
                         width: "100%"
-                      }}
+                    }}
                     className='ag-theme-balham-dark'
                 >
-                    <ContextForRun.Provider value={{running: this.props.running, balance:this.props.balance}}>
+                    <ContextForRun.Provider value={{ running: this.props.running, balance: this.props.balance }}>
                         <div className='nonGridContainer'>
-                            <label className = 'nonGridContainerElements'>Sell amount:</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div className='slider-container'>
+                        <label className='nonGridContainerElements'>Buy amount:</label>
+                            &nbsp;&nbsp;
+                        <Slider
+                            onChange={(event, val) => {
+                                this.handleBuyValueChange(val)
+                            }}
+                            name="buySlider"
+                            ValueLabelComponent={ValueLabelComponent}
+                            defaultValue={DEFAULT_BUY_SELL_VALUE}
+                        />
+                            
+                            &nbsp;&nbsp;
+                        <label className='nonGridContainerElements'>{this.props.buyAmount}</label>
+                            &nbsp;<span className='verticalDivider'></span>&nbsp;
+                            <label className='nonGridContainerElements'>Sell amount:</label>
+                            &nbsp;&nbsp;
                         <Slider
                                 onChange={(event, val) => {
                                     this.handleSellValueChange(val);
@@ -103,41 +112,37 @@ class App extends Component {
                                 ValueLabelComponent={ValueLabelComponent}
                                 defaultValue={DEFAULT_BUY_SELL_VALUE}
                             />
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label className = 'nonGridContainerElements'>{this.props.sellAmount}</label>
-                            &nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;
-                        <label className = 'nonGridContainerElements'>Buy amount:</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Slider
-                                onChange={(event, val) => {
-                                    this.handleBuyValueChange(val)
-                                }}
-                                name="buySlider"
-                                ValueLabelComponent={ValueLabelComponent}
-                                defaultValue={DEFAULT_BUY_SELL_VALUE}
-                            />
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label className = 'nonGridContainerElements'>{this.props.buyAmount}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label className = 'nonGridContainerElements'>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label className = 'nonGridContainerElements'>Net Value: {balanceAndNetValueFormatter(this.props.netValue)}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='verticalDivider'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+                            
+                            &nbsp;&nbsp;
+                        <label className='nonGridContainerElements'>{this.props.sellAmount}</label>
+                            &nbsp;<span className='verticalDivider'></span>&nbsp;
+                            </div>
+                            
+                        <label className='nonGridContainerElements'>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
+                            &nbsp;<span className='verticalDivider'></span>&nbsp;
+                        <label className='nonGridContainerElements'>Net Value: {balanceAndNetValueFormatter(this.props.netValue)}</label>
+                            <div className='secondRowMaker'></div>
+                            <div className='secondRow'>
+                            <label className='nonGridContainerElements'>{storeUpdateCounterFormatter(this.props.timesStoreHasBeenUpdated)}</label>
+                            <div className='button-container'>
                         <button
-                        className='buy-sell-button'
-                        onClick={this.advanceButtonHandler}
-                    >Advance
+                                className='buy-sell-button'
+                                onClick={this.advanceButtonHandler}
+                            >Advance
                     </button>
-                    <button
-                        className='buy-sell-button'
-                        onClick={this.runButtonHandler}
-                    >Run
+                            <button
+                                className='buy-sell-button'
+                                onClick={this.runButtonHandler}
+                            >Run
                     </button>
-                    <button
-                        className='buy-sell-button'
-                        onClick={this.stopButtonHandler}
-                    >Stop
+                            <button
+                                className='buy-sell-button'
+                                onClick={this.stopButtonHandler}
+                            >Stop
                     </button>
+                    </div>
+                    </div>
+                    
                         </div>
                         <AgGridReact
                             columnDefs={[
@@ -150,7 +155,7 @@ class App extends Component {
                                     field: 'country',
                                     rowGroup: true,
                                     hide: true,
-                                    enableRowGroup:true,
+                                    enableRowGroup: true,
 
                                 },
                                 {
@@ -164,29 +169,29 @@ class App extends Component {
                                     field: 'quantity',
                                     aggFunc: 'sum',
                                     filter: "agNumberColumnFilter",
-                                    filterParams:{
+                                    filterParams: {
                                         type: 'lessThan'
                                     },
                                     floatingFilterComponentParams: { suppressFilterButton: true },
                                     onCellValueChanged: (event) => {
-                                        
+
                                         if (event.oldValue < event.newValue) {
-                                            let buyAmount = { amount: event.newValue - event.oldValue }
+                                            let buyAmount = event.newValue - event.oldValue
                                             event.data.quantity = event.oldValue
-                                            this.props.onBuy(event.data.id, buyAmount.amount, event.data.price)
+                                            this.props.onBuy(event.data.id, buyAmount, event.data.price)
                                         }
                                         if (event.oldValue > event.newValue) {
-                                            let sellAmount = { amount: event.oldValue - event.newValue }
+                                            let sellAmount = event.oldValue - event.newValue
                                             event.data.quantity = event.oldValue
-                                            this.props.onSell(event.data.id, sellAmount.amount, event.data.price, event.data.quantity)
+                                            this.props.onSell(event.data.id, sellAmount, event.data.price, event.data.quantity)
                                         }
-                                        if(isNaN(event.newValue)){
+                                        if (isNaN(event.newValue)) {
                                             let newRowData = this.props.rowData.slice()
                                             event.data.quantity = event.oldValue
                                             this.removeNaNValues(newRowData, event)
-                                       
+
                                         }
-                                        
+
                                     },
                                     valueParser: (params) => {
                                         return Number(params.newValue)
@@ -199,10 +204,10 @@ class App extends Component {
                                     aggFunc: 'sum',
                                     filter: "agNumberColumnFilter",
                                     floatingFilterComponentParams: { suppressFilterButton: true },
-                            
+
                                     valueFormatter: params => {
                                         if (params.node !== null) {
-                                            return _preFormatter(params, _priceFormatter)
+                                            return preFormatter(params, priceFormatter)
                                         } return null
                                     },
                                     cellRenderer: "agAnimateShowChangeCellRenderer",
@@ -210,9 +215,9 @@ class App extends Component {
                                 },
                                 {
                                     headerName: 'B/S/K',
-                                    valueGetter: params => _bskGetter(params),
+                                    valueGetter: params => bskGetter(params),
                                     cellRenderer: 'bskRenderer',
-                            
+
                                     filter: false,
                                     cellRendererParams: (params) => {
                                         return {
@@ -230,24 +235,23 @@ class App extends Component {
                             autoGroupColumnDef={
                                 {
                                     headerName: 'Country/Instrument',
-                            
-                            }
+
+                                }
                             }
                             defaultColDef={{
                                 filter: true,
                                 sortable: true,
                                 flex: 1,
-                                suppressMenu: true
-                                
+                                suppressMenu: true,
+                                minWidth: 250
+
                             }}
-                            
-                            // popupParent={document.querySelector("body")}
-                            suppressAggFuncInHeader={true}                         
+
+                            suppressAggFuncInHeader={true}
                             rowGroupPanelShow={'always'}
                             frameworkComponents={{ bskRenderer: BskRenderer }}
                             rowData={this.props.rowData}
                             onGridReady={this.onGridReady.bind(this)}
-                            getMainMenuItems={this.getMainMenuItems.bind(this)}
                             onCellValueChanged={this.onCellValueChanged}
                             deltaRowDataMode={true}
                             sideBar={true}
@@ -256,6 +260,7 @@ class App extends Component {
                             onModelUpdated={() => {
                                 if (startTime == null) return;
                                 console.log(`transaction took: ${Date.now() - startTime} milliseconds.`)
+
                             }}
                             getRowNodeId={data => data.id}>
                         </AgGridReact>
@@ -273,8 +278,11 @@ class App extends Component {
 }
 
 
-
 const DEFAULT_BUY_SELL_VALUE = 100;
+
+const storeUpdateCounterFormatter = (counter)=>{
+    return (counter===1) ? `The Store Has Been Updated ${counter} time` : `The Store Has Been Updated ${counter} times`
+}
 
 const balanceAndNetValueFormatter = (balanceOrnetValue) => {
     let balanceOrnetValueInMill = balanceOrnetValue / 1000000;
@@ -284,7 +292,7 @@ const balanceAndNetValueFormatter = (balanceOrnetValue) => {
     return (balanceOrnetValue / 1000000).toFixed(4) + ' millions'
 }
 
-const _bskGetter = (params) => {
+const bskGetter = (params) => {
     if (params.node.group) {
         return null
     }
@@ -292,12 +300,12 @@ const _bskGetter = (params) => {
     return Math.round((params.data.price)) < 300 ? 'BUY'
         : Math.round((params.data.price)) > 400 ? 'SELL'
             : 'KEEP'
-    
+
 };
 
-const _preFormatter = (params, formatter) => params.node.group ? formatter(params.value) : formatter(params.data[params.column.colDef.field]);
+const preFormatter = (params, formatter) => params.node.group ? formatter(params.value) : formatter(params.data[params.column.colDef.field]);
 
-const _priceFormatter = value => Number((Math.round(value * 100) / 100).toFixed(2));
+const priceFormatter = value => Number((Math.round(value * 100) / 100).toFixed(2));
 
 const mapStateToProps = state => {
     return {
@@ -306,7 +314,8 @@ const mapStateToProps = state => {
         sellAmount: state.sellAmount,
         buyAmount: state.buyAmount,
         balance: state.balance,
-        netValue: state.netValue
+        netValue: state.netValue,
+        timesStoreHasBeenUpdated: state.timesStoreHasBeenUpdated
     }
 };
 

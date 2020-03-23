@@ -9,13 +9,11 @@ export default class BskRenderer extends Component {
     }
 
     handleSell = event => {
-        console.log(this.node)
         this.props.sellButton(this.node.data.id, this.node.data.price, this.node.data.quantity)
 
     };
 
     handleBuy = event => {
-        console.log(this.node.data.quantity)
         this.props.buyButton(this.node.data.id, this.node.data.price, this.node.data.quantity)
     };
 

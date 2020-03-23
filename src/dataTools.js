@@ -74,7 +74,8 @@ const initialState = {
   sellAmount: 100,
   buyAmount: 100,
   balance: 100000,
-  netValue: _calculateNetValue(rowData)
+  netValue: _calculateNetValue(rowData),
+  timesStoreHasBeenUpdated: 0
 };
 
 const _fluctuation = (prevVal) => _randomNumGenerator(prevVal / 2);
