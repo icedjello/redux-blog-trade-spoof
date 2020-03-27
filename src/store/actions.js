@@ -58,3 +58,18 @@ export const updateBuyAmount = (amount) =>{
         payload: amount
     }
 };
+
+export const recordTransactionTime = (timeTaken) =>{
+    return {
+        type: actionTypes.RECORD_TRANSACTION_TIME,
+        payload: timeTaken
+    }
+};
+
+export const handleNAN = (id, oldValue) =>{
+    return {
+        type: actionTypes.HANDLE_NAN,
+        payload: {id, oldValue}
+    }
+}
+

@@ -35,19 +35,24 @@ class App extends Component {
     }
 
 
+    sideBar = {
+        toolPanels: [
+            {
+                id: 'columns',
+                labelDefault: 'Columns',
+                labelKey: 'columns',
+                iconKey: 'columns',
+                toolPanel: 'agColumnsToolPanel',
+            },
+            {
+                id: 'filters',
+                labelDefault: 'Filters',
+                labelKey: 'filters',
+                iconKey: 'filter',
+                toolPanel: 'agFiltersToolPanel',
+            },
+        ],
 
-    removeNaNValues(rowData, event) {
-        let noNaNRowData = rowData.map(row => {
-            if (row.id === event.data.id) {
-              return {
-                    ...row,
-                    quantity: event.oldValue
-                }
-
-            }
-            return row
-        })
-        event.api.setRowData(noNaNRowData)
     }
 
     advanceButtonHandler = () => {
@@ -65,11 +70,15 @@ class App extends Component {
     };
 
     handleSellValueChange = (val) => {
+        let time = Date.now() - startTime;
         this.props.updateSellAmount(val)
+        this.props.updateTimeTaken(time)
     };
 
     handleBuyValueChange = (val) => {
+        let time = Date.now() - startTime;
         this.props.updateBuyAmount(val)
+        this.props.updateTimeTaken(time)
     };
 
 
@@ -87,62 +96,69 @@ class App extends Component {
                 >
                     <ContextForRun.Provider value={{ running: this.props.running, balance: this.props.balance }}>
                         <div className='nonGridContainer'>
-                        <div className='slider-container'>
-                        <label className='nonGridContainerElements'>Buy amount:</label>
+                            <div className='slider-container'>
+                                <label className='nonGridContainerElements'>Buy amount:</label>
                             &nbsp;&nbsp;
                         <Slider
-                            onChange={(event, val) => {
-                                this.handleBuyValueChange(val)
-                            }}
-                            name="buySlider"
-                            ValueLabelComponent={ValueLabelComponent}
-                            defaultValue={DEFAULT_BUY_SELL_VALUE}
-                        />
-                            
+                                    onChange={(event, val) => {
+                                        this.handleBuyValueChange(val)
+                                    }}
+                                    name="buySlider"
+                                    ValueLabelComponent={ValueLabelComponent}
+                                    defaultValue={DEFAULT_BUY_SELL_VALUE}
+                                />
+
                             &nbsp;&nbsp;
                         <label className='nonGridContainerElements'>{this.props.buyAmount}</label>
                             &nbsp;<span className='verticalDivider'></span>&nbsp;
                             <label className='nonGridContainerElements'>Sell amount:</label>
                             &nbsp;&nbsp;
                         <Slider
-                                onChange={(event, val) => {
-                                    this.handleSellValueChange(val);
-                                }}
-                                name="sellSlider"
-                                ValueLabelComponent={ValueLabelComponent}
-                                defaultValue={DEFAULT_BUY_SELL_VALUE}
-                            />
-                            
+                                    onChange={(event, val) => {
+                                        this.handleSellValueChange(val);
+                                    }}
+                                    name="sellSlider"
+                                    ValueLabelComponent={ValueLabelComponent}
+                                    defaultValue={DEFAULT_BUY_SELL_VALUE}
+                                />
+
                             &nbsp;&nbsp;
                         <label className='nonGridContainerElements'>{this.props.sellAmount}</label>
                             &nbsp;<span className='verticalDivider'></span>&nbsp;
                             </div>
-                            
-                        <label className='nonGridContainerElements'>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
+
+                            <label className='nonGridContainerElements'>Balance: {balanceAndNetValueFormatter(this.props.balance)}</label>
                             &nbsp;<span className='verticalDivider'></span>&nbsp;
                         <label className='nonGridContainerElements'>Net Value: {balanceAndNetValueFormatter(this.props.netValue)}</label>
                             <div className='secondRowMaker'></div>
+                            <label className='nonGridContainerElements'>{this.props.timesStoreHasBeenUpdated === 1 ? `The Store Has Been Updated 1 Time` :
+                                `The Store Has Been Updated ${this.props.timesStoreHasBeenUpdated} Times`}</label>
+                            <div className='secondRowMaker'></div>
+                            <label className='nonGridContainerElements'>{this.props.recordsUpdated === 1 ? `1 Row Has Been Updated` : `${this.props.recordsUpdated} Rows Have Been Updated`}</label>
+                            <div className='secondRowMaker'></div>
+                            <label className='nonGridContainerElements'>{`Total Transaction Time: ${this.props.timeTakenForTransaction}ms`}</label>
+                            <div className='secondRowMaker'></div>
                             <div className='secondRow'>
-                            <label className='nonGridContainerElements'>{storeUpdateCounterFormatter(this.props.timesStoreHasBeenUpdated)}</label>
-                            <div className='button-container'>
-                        <button
-                                className='buy-sell-button'
-                                onClick={this.advanceButtonHandler}
-                            >Advance
+                                <div className='button-container'>
+                                    <button
+                                        className='buy-sell-button'
+                                        onClick={this.advanceButtonHandler}
+                                    >Advance
                     </button>
-                            <button
-                                className='buy-sell-button'
-                                onClick={this.runButtonHandler}
-                            >Run
+                                    <button
+                                        className='buy-sell-button'
+                                        onClick={this.runButtonHandler}
+                                    >Run
                     </button>
-                            <button
-                                className='buy-sell-button'
-                                onClick={this.stopButtonHandler}
-                            >Stop
+                                    <button
+                                        className='buy-sell-button'
+                                        onClick={this.stopButtonHandler}
+                                    >Stop
                     </button>
-                    </div>
-                    </div>
-                    
+                                </div>
+                            </div>
+
+
                         </div>
                         <AgGridReact
                             columnDefs={[
@@ -175,6 +191,10 @@ class App extends Component {
                                     floatingFilterComponentParams: { suppressFilterButton: true },
                                     onCellValueChanged: (event) => {
 
+                                        if (isNaN(event.newValue)) {
+                                            this.props.handleNAN(event.data.id, event.oldValue)
+
+                                        }
                                         if (event.oldValue < event.newValue) {
                                             let buyAmount = event.newValue - event.oldValue
                                             event.data.quantity = event.oldValue
@@ -185,18 +205,14 @@ class App extends Component {
                                             event.data.quantity = event.oldValue
                                             this.props.onSell(event.data.id, sellAmount, event.data.price, event.data.quantity)
                                         }
-                                        if (isNaN(event.newValue)) {
-                                            let newRowData = this.props.rowData.slice()
-                                            event.data.quantity = event.oldValue
-                                            this.removeNaNValues(newRowData, event)
-
-                                        }
 
                                     },
                                     valueParser: (params) => {
                                         return Number(params.newValue)
                                     },
-                                    editable: () => { if (this.props.running) { return false } return true },
+                                    editable: () => {
+                                         return (this.props.running) ? false : true 
+                                        }
 
                                 },
                                 {
@@ -247,6 +263,7 @@ class App extends Component {
 
                             }}
 
+
                             suppressAggFuncInHeader={true}
                             rowGroupPanelShow={'always'}
                             frameworkComponents={{ bskRenderer: BskRenderer }}
@@ -254,14 +271,16 @@ class App extends Component {
                             onGridReady={this.onGridReady.bind(this)}
                             onCellValueChanged={this.onCellValueChanged}
                             deltaRowDataMode={true}
-                            sideBar={true}
+                            sideBar={this.sideBar}
                             floatingFilter={true}
                             groupDefaultExpanded={-1}
                             onModelUpdated={() => {
                                 if (startTime == null) return;
-                                console.log(`transaction took: ${Date.now() - startTime} milliseconds.`)
+                                let time = Date.now() - startTime;
+                                this.props.updateTimeTaken(time)
 
                             }}
+
                             getRowNodeId={data => data.id}>
                         </AgGridReact>
                     </ContextForRun.Provider>
@@ -280,9 +299,6 @@ class App extends Component {
 
 const DEFAULT_BUY_SELL_VALUE = 100;
 
-const storeUpdateCounterFormatter = (counter)=>{
-    return (counter===1) ? `The Store Has Been Updated ${counter} time` : `The Store Has Been Updated ${counter} times`
-}
 
 const balanceAndNetValueFormatter = (balanceOrnetValue) => {
     let balanceOrnetValueInMill = balanceOrnetValue / 1000000;
@@ -315,7 +331,9 @@ const mapStateToProps = state => {
         buyAmount: state.buyAmount,
         balance: state.balance,
         netValue: state.netValue,
-        timesStoreHasBeenUpdated: state.timesStoreHasBeenUpdated
+        timesStoreHasBeenUpdated: state.timesStoreHasBeenUpdated,
+        recordsUpdated: state.recordsUpdated,
+        timeTakenForTransaction: state.timeTakenForTransaction
     }
 };
 
@@ -345,7 +363,9 @@ const mapDispatchToProps = dispatch => {
         onBuy: (id, amount, price) => dispatch(actions.buy(id, amount, price)),
         onSell: (id, amount, price, quantity) => dispatch(actions.sell(id, amount, price, quantity)),
         updateSellAmount: (amount) => dispatch(actions.updateSellAmount(amount)),
-        updateBuyAmount: (amount) => dispatch(actions.updateBuyAmount(amount))
+        updateBuyAmount: (amount) => dispatch(actions.updateBuyAmount(amount)),
+        updateTimeTaken: (time) => dispatch(actions.recordTransactionTime(time)),
+        handleNAN: (id, oldValue) => dispatch(actions.handleNAN(id, oldValue))
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

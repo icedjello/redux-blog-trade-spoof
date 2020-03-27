@@ -3,7 +3,7 @@
 .parent {
   width: 100vw;
   height: 100vh;
-  background: grey;
+  background: #202020
 }
 
 
@@ -80,9 +80,6 @@
   width:100%;
 }
 
-.secondRow .nonGridContainerElements {
-  color: black;
-}
 
 .secondRow .button-container {
   display:flex;
